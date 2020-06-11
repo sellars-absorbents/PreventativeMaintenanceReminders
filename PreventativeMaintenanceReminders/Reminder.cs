@@ -4,15 +4,8 @@ using System.Collections.Specialized;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Text;
 using System.Threading.Tasks;
-using System.Linq;
-using System.Net;
-using System.Net.Mail;
 using System.Data;
-using System.Text.RegularExpressions;
-
-using SellarsEmail;
 
 namespace PreventativeMaintenanceReminders
 {
@@ -118,31 +111,25 @@ namespace PreventativeMaintenanceReminders
         {
             bool FunctionValue = false;
 
-            try
-            {
-                List<String> to = new List<string>();
-                to.Add(ed.Email);
+            List<String> to = new List<string>();
+            to.Add(ed.Email);
 
-                Hashtable templateVars = new Hashtable();
-                templateVars.Add("Today", pm_currentDate.ToString("MM/dd/yyyy HH:mm:ss"));
-                templateVars.Add("ID", ed.ID.ToString());
-                templateVars.Add("Issue", ed.Issue);
-                templateVars.Add("Scheduled", ed.StartDate.ToString("MM/dd/yyyy hh:mm") + " to " + ed.EndDate.ToString("MM/dd/yyyy hh:mm"));
+            Hashtable templateVars = new Hashtable();
+            templateVars.Add("Today", pm_currentDate.ToString("MM/dd/yyyy HH:mm:ss"));
+            templateVars.Add("ID", ed.ID.ToString());
+            templateVars.Add("Issue", ed.Issue);
+            templateVars.Add("Scheduled", ed.StartDate.ToString("MM/dd/yyyy hh:mm") + " to " + ed.EndDate.ToString("MM/dd/yyyy hh:mm"));
 
-                SellarsEmail.TemplateEmail te = new SellarsEmail.TemplateEmail();
-                te.From = emailFromAddress;
-                te.To = to;
-                te.Subject = ed.Subject;
-                te.TemplateVariables = templateVars;
-                te.TemplateName = emailTemplate;
+            SellarsEmail.TemplateEmail te = new SellarsEmail.TemplateEmail();
+            te.From = emailFromAddress;
+            te.To = to;
+            te.Subject = ed.Subject;
+            te.TemplateVariables = templateVars;
+            te.TemplateName = emailTemplate;
 
-                te.Send();
+            te.Send();
 
-                FunctionValue = true;
-            }
-            catch
-            {
-            }
+            FunctionValue = true;
 
             return FunctionValue;
         }
@@ -178,6 +165,5 @@ namespace PreventativeMaintenanceReminders
 
             return emails;
         }
-
     }
 }
